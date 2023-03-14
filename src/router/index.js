@@ -9,20 +9,36 @@ const router = createRouter({
     },
     {
       path: '/home',
-      component: () => import("@/views/home/index.vue")
+      component: () => import("@/views/home/index.vue"),
+      meta: {
+        showNavBar: true
+      }
     },
     {
       path: '/order',
-      component: () => import("@/views/order/index.vue")
+      component: () => import("@/views/order/index.vue"),
+      meta: {
+        showNavBar: true
+      }
     },
     {
       path: '/message',
-      component: () => import("@/views/message/index.vue")
+      component: () => import("@/views/message/index.vue"),
+      meta: {
+        showNavBar: true
+      }
     },
     {
       path: '/favor',
-      component: () => import("@/views/favor/index.vue")
-    }
+      component: () => import("@/views/favor/index.vue"),
+      meta: {
+        showNavBar: true
+      }
+    },
+    {
+      path: '/city',
+      component: () => import("@/views/city/index.vue")
+    },
   ],
 })
 

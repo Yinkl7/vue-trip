@@ -2,3 +2,11 @@
   /* 文字颜色 */
   --primary-color: #ff9854;
 }
+
+.hiden-banner {
+  height: 100vh;
+  position: relative;
+  z-index: 10;
+  background-color: #fff;
+  overflow-y: scroll;
+}
