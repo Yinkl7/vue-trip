@@ -1,8 +1,11 @@
 <script setup>
-import { ref } from 'vue';
-import { useRouter } from 'vue-router';
+import useCityStore from '@/store/modules/city'
+import cityGroup from './components/cityGroup.vue'
 
-import httpRequest from '@/service/request'
+import { ref, computed } from 'vue'
+import { useRouter } from 'vue-router'
+import { storeToRefs } from 'pinia'
+
 
 const router = useRouter()
 // 搜索框
@@ -12,27 +15,43 @@ const cancelClick = () => {
 }
 
 // tab
-const active = ref(0)
-
-httpRequest.get({
-  url: '/city/all'
-}).then(res => {
-  console.log("data========= ", res)
-}).catch(err => {
-  console.log('error============ ', err)
-})
+const tabActive = ref()
+const cityStore = useCityStore()
+cityStore.getCitys()
+const { allCities } = storeToRefs(cityStore)
+const currentGroup = computed(() => allCities.value[tabActive.value])
 
 </script> 
 
 <template>
   <div class="city">
-    <van-search v-model="searchValue" placeholder="" shape="round" show-action @cancel="cancelClick" />
+    <div class="search">
+      <van-search v-model="searchValue" placeholder="" shape="round" show-action @cancel="cancelClick" />
+      <van-tabs v-model:active="tabActive" color="#ff9854">
+        <template v-for="(value, key) in allCities" :key="key">
+          <van-tab :title="value.title" :name="key"></van-tab>
+        </template>
+      </van-tabs>
+    </div>
 
-    <van-tabs v-model:active="active" color="#ff9854">
-      <van-tab title="国内.港澳台">内容 1</van-tab>
-      <van-tab title="海外">内容 2</van-tab>
-    </van-tabs>
+    <div class="content">
+      <template v-for="(value, key) in allCities" :key="key">
+        <city-group v-show="tabActive == key" :groupData="value" />
+      </template>
+    </div>
   </div>
 </template>
 
-<style scoped></style>
+<style lang="scss" scoped>
+.city {
+  .search {
+    position: relative;
+    z-index: 999;
+  }
+
+  .content {
+    height: calc(100vh - 98px);
+    overflow-y: auto;
+  }
+}
+</style>
